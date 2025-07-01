@@ -1,18 +1,19 @@
 <h1 align="center">Hi there 👋, I'm Tejomay Swain</h1>
 
 <p align="center">
-  <b>Data Engineer | Python & PySpark Enthusiast | Snowflake Developer | SQL Aficionado</b>
+  <b>AWS Data Engineer | ETL Specialist | Python & PySpark Enthusiast | Snowflake & DBT Developer</b>
 </p>
 
 ---
 
 ### 👨‍💻 About Me
 
-- 🔭 Currently building projects with **Snowflake**, **PySpark**, and **SQL**
-- 🌱 Deep diving into **Data Science**, **Python**, and **Cloud Data Engineering**
-- 💡 Passionate about solving real-world problems with clean, scalable code
-- 🎯 Actively working on enhancing my **Data Engineering** & **ML** skill set
-- 💬 Always open to discuss **Snowflake**, **Data Pipelines**, and **Python projects**
+- 🔨 Building **cloud-scale data pipelines** with **AWS**, **Snowflake**, and **DBT**
+- ⚡ Skilled in orchestrating ETL workflows with **Glue**, **Lambda**, **Step Functions**, and **EMR**
+- 🛠️ Experienced with **Athena** for serverless querying and **SageMaker** for ML integration
+- 🧩 Strong foundation in **Python**, **PySpark**, and distributed data processing
+- 🌱 Actively sharpening my skills in **Data Engineering**, **Cloud Architecture**, and **ML Pipelines**
+- 💬 Open to connect on **AWS ETL**, **Data Pipelines**, **Snowflake**, and **Cloud ML solutions**
 - 📫 Reach me at: `tejomay3@gmail.com`
 
 ---
@@ -20,25 +21,27 @@
 ### 🚀 Tech Stack
 
 <p align="left">
+  <img src="https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white"/>
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/PySpark-FF9900?style=for-the-badge&logo=apachespark&logoColor=white"/>
   <img src="https://img.shields.io/badge/Snowflake-29BDEF?style=for-the-badge&logo=snowflake&logoColor=white"/>
+  <img src="https://img.shields.io/badge/DBT-FF694B?style=for-the-badge&logo=dbt&logoColor=white"/>
   <img src="https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white"/>
-  <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Matplotlib-FF6600?style=for-the-badge&logo=plotly&logoColor=white"/>
 </p>
+
+**AWS Services I Work With:**
+- 🟧 Glue | Lambda | Step Functions | EMR | Athena | S3 | SageMaker
 
 ---
 
-### 📂 Featured Projects
+### 📂 Featured Projects (All WIP 🚧)
 
 | Project | Description | Tech |
 |---------|-------------|------|
+| [AWS-ETL-Pipeline](#) | Building scalable ETL with Glue, Step Functions, and Snowflake | WIP |
 | [EDA-Student-Habits](https://github.com/Tejustarr/EDA-Student-Habits) | Exploring how student habits impact academic performance | Python, Pandas, Matplotlib |
-| [Snowflake-SQL-CheatSheet](https://github.com/Tejustarr/Snowflake-SQL-CheatSheet) | Quick reference for Snowflake SQL queries | Snowflake, SQL |
-| [Productivity-Prediction](https://github.com/Tejustarr/Productivity-Prediction) | ML project predicting productivity of garment workers | Python, Scikit-learn |
-| [PySpark-Data-Pipeline](https://github.com/Tejustarr/PySpark-Data-Pipeline) | Building scalable ETL pipelines using PySpark | PySpark, SQL |
+| [DBT-Snowflake-Models](#) | DBT models for Snowflake warehouse optimization | WIP |
+| More projects coming soon... | Stay tuned for AWS, Snowflake & ML projects | WIP |
 
 ---
 
@@ -58,9 +61,9 @@
 
 <p align="left">
   <a href="mailto:tejomay3@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
-  <a href="https://www.linkedin.com/in/tejomayswain"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+  <a href="https://www.linkedin.com/in/tejomay-swain-738467196/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
 </p>
 
 ---
 
-<p align="center"><i>"Code smart. Learn fast. Stay curious."</i></p>
+<p align="center"><i>"Code smart. Automate smarter. Stay curious."</i></p>
