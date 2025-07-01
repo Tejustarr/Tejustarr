@@ -38,9 +38,7 @@
 
 | Project | Description | Tech |
 |---------|-------------|------|
-| [AWS-ETL-Pipeline](#) | Building scalable ETL with Glue, Step Functions, and Snowflake | WIP |
 | [EDA-Student-Habits](https://github.com/Tejustarr/EDA-Student-Habits) | Exploring how student habits impact academic performance | Python, Pandas, Matplotlib |
-| [DBT-Snowflake-Models](#) | DBT models for Snowflake warehouse optimization | WIP |
 | More projects coming soon... | Stay tuned for AWS, Snowflake & ML projects | WIP |
 
 ---
