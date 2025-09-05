@@ -43,6 +43,14 @@
 
 ---
 
+### 📂 Latest Repositories
+
+<!-- REPOSTS:START -->
+- [repo-placeholder](https://github.com/Tejustarr/repo-placeholder) — Replace with your latest repos
+<!-- REPOSTS:END -->
+
+---
+
 ### 📊 GitHub Stats
 
 <p align="center">
