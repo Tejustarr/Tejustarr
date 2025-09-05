@@ -45,7 +45,7 @@
 ### 🧾 Languages Used (across my public repos)
 
 <!-- LANGS:START -->
-*(Languages will be listed here automatically)*
+- Jupyter Notebook
 <!-- LANGS:END -->
 
 ---
