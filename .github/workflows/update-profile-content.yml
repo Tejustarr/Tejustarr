@@ -1,0 +1,163 @@
+name: Update README - Reposts & Languages (safe, atomic)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"   # daily at 00:00 UTC (adjust if you like)
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (minimal)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update README - latest repos & languages (Octokit)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // config
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const TOP_N_REPOS = 6;
+
+            // helper: paginate listForUser
+            async function listAllReposForUser(username) {
+              let page = 1;
+              const per_page = 100;
+              let all = [];
+              while (true) {
+                const resp = await github.rest.repos.listForUser({ username, per_page, page });
+                if (!resp || !resp.data) break;
+                all = all.concat(resp.data);
+                if (resp.data.length < per_page) break;
+                page++;
+              }
+              return all;
+            }
+
+            console.log(`Fetching public repos for user: ${owner}...`);
+            const allRepos = await listAllReposForUser(owner);
+
+            if (!allRepos || allRepos.length === 0) {
+              console.log("No public repos found for user. Will generate empty placeholders.");
+            }
+
+            // sort by updated_at desc and choose top N
+            const sortedByUpdated = (allRepos || []).slice().sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+            const topRepos = sortedByUpdated.slice(0, TOP_N_REPOS);
+
+            // build latest repos markdown lines
+            const repoLines = topRepos.map(r => {
+              const desc = r.description ? ` — ${r.description.replace(/\r?\n/g,' ').trim()}` : "";
+              return `- [${r.name}](${r.html_url})${desc}`;
+            });
+
+            // aggregate language bytes across all repos
+            console.log(`Fetching languages for ${allRepos.length} repos (this may take a few seconds)...`);
+            const langBytes = {};
+            for (const r of allRepos || []) {
+              try {
+                const langsResp = await github.rest.repos.listLanguages({
+                  owner,
+                  repo: r.name
+                });
+                const langs = langsResp.data || {};
+                for (const [lang, bytes] of Object.entries(langs)) {
+                  langBytes[lang] = (langBytes[lang] || 0) + bytes;
+                }
+              } catch (err) {
+                // non-fatal; skip repo
+                console.log(`Warning: couldn't fetch languages for ${r.name}: ${err.message}`);
+              }
+            }
+
+            // sort languages by bytes desc
+            const sortedLangs = Object.entries(langBytes)
+              .sort((a,b) => b[1] - a[1])
+              .map(x => x[0]);
+
+            // If none found, keep placeholder list empty (no assumptions)
+            const languagesList = sortedLangs.length ? sortedLangs : [];
+
+            // build blocks
+            const REPOSTS_START = "<!-- REPOSTS:START -->";
+            const REPOSTS_END = "<!-- REPOSTS:END -->";
+            const LANGS_START = "<!-- LANGS:START -->";
+            const LANGS_END = "<!-- LANGS:END -->";
+
+            const repostsBlock = REPOSTS_START + "\n" + (repoLines.length ? repoLines.join("\n") : "*(No public repositories yet)*") + "\n" + REPOSTS_END;
+            const langsBlock = LANGS_START + "\n" + (languagesList.length ? languagesList.map(l => `- ${l}`).join("\n") : "*(No languages detected yet)*") + "\n" + LANGS_END;
+
+            // fetch README (content + sha)
+            console.log("Fetching README.md from repository...");
+            let readmeResp;
+            try {
+              readmeResp = await github.rest.repos.getContent({
+                owner,
+                repo,
+                path: "README.md",
+              });
+            } catch (err) {
+              console.log("README.md not found in repo. Will create a new one with blocks.");
+            }
+
+            let currentContent = "";
+            let sha = undefined;
+            if (readmeResp && readmeResp.data && readmeResp.data.content) {
+              const encoding = readmeResp.data.encoding || "base64";
+              currentContent = Buffer.from(readmeResp.data.content, encoding).toString("utf8");
+              sha = readmeResp.data.sha;
+            } else {
+              // a minimal starter README if none exists
+              currentContent = `# ${owner}\n\n*(This README was created by the update workflow.)*\n\n${repostsBlock}\n\n${langsBlock}\n`;
+            }
+
+            // perform replacements (both)
+            let newContent = currentContent;
+
+            // replace reposts block or append if missing
+            const repostsRegex = new RegExp(`${REPOSTS_START}[\\s\\S]*?${REPOSTS_END}`, "m");
+            if (repostsRegex.test(newContent)) {
+              newContent = newContent.replace(repostsRegex, repostsBlock);
+            } else {
+              // try to place above GitHub stats or append at end
+              newContent = newContent.trimEnd() + "\n\n" + repostsBlock + "\n";
+            }
+
+            // replace langs block or append if missing
+            const langsRegex = new RegExp(`${LANGS_START}[\\s\\S]*?${LANGS_END}`, "m");
+            if (langsRegex.test(newContent)) {
+              newContent = newContent.replace(langsRegex, langsBlock);
+            } else {
+              newContent = newContent.trimEnd() + "\n\n" + langsBlock + "\n";
+            }
+
+            if (newContent === currentContent) {
+              console.log("No changes to README.md; nothing to commit.");
+              return;
+            }
+
+            // create or update file via API (atomic)
+            const newContentBase64 = Buffer.from(newContent, "utf8").toString("base64");
+            const commitMessage = "chore: update Latest Repositories & Languages (automated)";
+
+            console.log("Committing updated README.md via API...");
+            await github.rest.repos.createOrUpdateFileContents({
+              owner,
+              repo,
+              path: "README.md",
+              message: commitMessage,
+              content: newContentBase64,
+              sha, // undefined if new file (API will create)
+              committer: { name: "github-actions[bot]", email: "github-actions[bot]@users.noreply.github.com" },
+              author: { name: "github-actions[bot]", email: "github-actions[bot]@users.noreply.github.com" }
+            });
+
+            console.log("README.md updated successfully.");
