@@ -50,6 +50,10 @@
 
 <!-- LANGS:START -->
 - Jupyter Notebook
+- Python
+- SQL
+- YAML
+- Markdown
 <!-- LANGS:END -->
 
 ---
