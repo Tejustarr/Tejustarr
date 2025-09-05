@@ -33,16 +33,6 @@
 - 🟧 Glue | Lambda | Step Functions | EMR | Athena | S3 | SageMaker
 
 ---
-
-### 📂 Featured Projects (All WIP 🚧)
-
-| Project | Description | Tech |
-|---------|-------------|------|
-| [EDA-Student-Habits](https://github.com/Tejustarr/EDA-Student-Habits) | Exploring how student habits impact academic performance | Python, Pandas, Matplotlib |
-| More projects coming soon... | Stay tuned for AWS, Snowflake & ML projects | WIP |
-
----
-
 ### 📂 Latest Repositories
 
 <!-- REPOSTS:START -->
