@@ -37,7 +37,11 @@
 ### 📂 Latest Repositories
 
 <!-- REPOSTS:START -->
-*(Latest repositories will be listed here automatically)*
+- [Tejustarr](https://github.com/Tejustarr/Tejustarr)
+- [math-foundations-ml](https://github.com/Tejustarr/math-foundations-ml) — Math Foundations for ML: Study notes, practice notebooks, and code covering the mathematical foundations of Data Science & Machine Learning (linear algebra, calculus, optimization, PCA/SVD)
+- [snowflake-handbook](https://github.com/Tejustarr/snowflake-handbook) — 📘 A structured Snowflake Handbook — from basics to expert, with cheatsheets, best practices, and new features.
+- [eda-student-habits](https://github.com/Tejustarr/eda-student-habits) — Exploratory Data Analysis project to investigate how student habits influence academic performance. Built entirely using Python, Pandas,.
+- [statistical-decision-garment-productivity](https://github.com/Tejustarr/statistical-decision-garment-productivity)
 <!-- REPOSTS:END -->
 
 ---
