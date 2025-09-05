@@ -1,30 +1,75 @@
-name: Update Latest Repositories (safe)
+name: Update Languages Used (safe)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 2 * * *"   # daily at 02:00 UTC (adjust if you like)
 
 permissions:
   contents: write
 
 jobs:
-  update-readme:
+  update-langs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (minimal)
+      - name: Checkout (shallow)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Update README using Octokit
+      - name: Generate and update LANGS block via Octokit
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            // 1) fetch README (to get current content & sha)
+
+            // 1) list public repos (paginate)
+            let allRepos = [];
+            let page = 1;
+            while (true) {
+              const resp = await github.rest.repos.listForUser({
+                username: owner,
+                per_page: 100,
+                page
+              });
+              if (!resp.data || resp.data.length === 0) break;
+              allRepos = allRepos.concat(resp.data);
+              if (resp.data.length < 100) break;
+              page++;
+            }
+
+            // 2) fetch languages for each repo and aggregate counts
+            const langCounts = {};
+            for (const r of allRepos) {
+              try {
+                const langsResp = await github.rest.repos.listLanguages({
+                  owner,
+                  repo: r.name,
+                });
+                for (const [lang, bytes] of Object.entries(langsResp.data || {})) {
+                  langCounts[lang] = (langCounts[lang] || 0) + bytes;
+                }
+              } catch (err) {
+                core.warning(`Failed to fetch languages for ${r.name}: ${err.message}`);
+              }
+            }
+
+            // 3) sort languages by total bytes descending
+            const sorted = Object.entries(langCounts)
+              .sort((a,b) => b[1] - a[1])
+              .map(x => x[0]);
+
+            // fallback if none found
+            const languagesList = sorted.length ? sorted : ["Python"];
+
+            // 4) build the block
+            const start = "<!-- LANGS:START -->";
+            const end = "<!-- LANGS:END -->";
+            const block = `${start}\n${languagesList.map(l => `- ${l}`).join("\n")}\n${end}`;
+
+            // 5) get README (content & sha)
             const readmeResp = await github.rest.repos.getContent({
               owner,
               repo,
@@ -34,48 +79,31 @@ jobs:
             const encoding = readmeResp.data.encoding || "base64";
             const contentRaw = Buffer.from(readmeResp.data.content, encoding).toString("utf8");
 
-            // 2) fetch latest repos (top 6 updated)
-            const reposResp = await github.rest.repos.listForUser({
-              username: owner,
-              sort: "updated",
-              per_page: 6,
-            });
-            const latest = reposResp.data.map(r => {
-              const desc = r.description ? ` — ${r.description.replace(/\n/g, ' ')}` : "";
-              return `- [${r.name}](${r.html_url})${desc}`;
-            }).join("\n");
-
-            // 3) build replacement block
-            const start = "<!-- REPOSTS:START -->";
-            const end = "<!-- REPOSTS:END -->";
-            const block = `${start}\n${latest}\n${end}`;
-
-            // 4) replace or append the block
-            let newContent;
+            // 6) replace or append the block
             const markerRegex = new RegExp(`${start}[\\s\\S]*?${end}`, "m");
+            let newContent;
             if (markerRegex.test(contentRaw)) {
               newContent = contentRaw.replace(markerRegex, block);
             } else {
-              // append at end if markers not found
               newContent = contentRaw.trimEnd() + "\n\n" + block + "\n";
             }
 
             if (newContent === contentRaw) {
-              core.info("No changes to README.md — nothing to commit.");
+              core.info("No changes to README.md — languages block already up-to-date.");
               return;
             }
 
-            // 5) commit via API
+            // 7) commit via API
             const newContentBase64 = Buffer.from(newContent, "utf8").toString("base64");
             await github.rest.repos.createOrUpdateFileContents({
               owner,
               repo,
               path: "README.md",
-              message: "chore: update latest repos (automated)",
+              message: "chore: update languages list (automated)",
               content: newContentBase64,
               sha,
               committer: { name: "github-actions[bot]", email: "github-actions[bot]@users.noreply.github.com" },
               author: { name: "github-actions[bot]", email: "github-actions[bot]@users.noreply.github.com" }
             });
 
-            core.info("README.md updated successfully.");
+            core.info("README.md languages block updated.");
