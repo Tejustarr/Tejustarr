@@ -1,0 +1,47 @@
+name: Update Latest Repositories
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # runs every day at 00:00 UTC
+  workflow_dispatch:       # lets you run manually from Actions tab
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch latest repos and update README
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const readme = fs.readFileSync("README.md", "utf8");
+
+            // Fetch latest repos
+            const { data: repos } = await github.rest.repos.listForUser({
+              username: context.repo.owner,
+              sort: "updated",
+              direction: "desc",
+              per_page: 6
+            });
+
+            const repoList = repos.map(r => `- [${r.name}](${r.html_url})${r.description ? " — " + r.description : ""}`).join("\n");
+
+            // Replace between markers
+            const newContent = readme.replace(
+              /<!-- REPOSTS:START -->([\\s\\S]*?)<!-- REPOSTS:END -->/,
+              `<!-- REPOSTS:START -->\n${repoList}\n<!-- REPOSTS:END -->`
+            );
+
+            if (newContent !== readme) {
+              fs.writeFileSync("README.md", newContent);
+              await exec.exec("git", ["config", "user.name", "github-actions[bot]"]);
+              await exec.exec("git", ["config", "user.email", "github-actions[bot]@users.noreply.github.com"]);
+              await exec.exec("git", ["commit", "-am", "chore: update latest repos"]);
+              await exec.exec("git", ["push"]);
+            } else {
+              console.log("No changes in repo list");
+            }
