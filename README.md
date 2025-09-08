@@ -37,11 +37,12 @@
 ### 📂 Latest Repositories
 
 <!-- REPOSTS:START -->
+- [dsai-pretest-0](https://github.com/Tejustarr/dsai-pretest-0) — Foundational repo for M.Tech DSAI Pre-Test prep — structured notes, examples, problems, and spaced-repetition flashcards covering Programming Fundamentals, Database Fundamentals, and Data Structures & Algorithms.
+- [dsai-python-for-data-science-1](https://github.com/Tejustarr/dsai-python-for-data-science-1) — To be added
 - [Tejustarr](https://github.com/Tejustarr/Tejustarr)
 - [snowflake-handbook](https://github.com/Tejustarr/snowflake-handbook) — 📘 A structured Snowflake Handbook — from basics to expert, with cheatsheets, best practices, and new features.
 - [math-foundations-ml](https://github.com/Tejustarr/math-foundations-ml) — Math Foundations for ML: Study notes, practice notebooks, and code covering the mathematical foundations of Data Science & Machine Learning (linear algebra, calculus, optimization, PCA/SVD)
 - [eda-student-habits](https://github.com/Tejustarr/eda-student-habits) — Exploratory Data Analysis project to investigate how student habits influence academic performance. Built entirely using Python, Pandas,.
-- [statistical-decision-garment-productivity](https://github.com/Tejustarr/statistical-decision-garment-productivity)
 <!-- REPOSTS:END -->
 
 ---
@@ -50,6 +51,7 @@
 
 <!-- LANGS:START -->
 - Jupyter Notebook
+- Python
 <!-- LANGS:END -->
 
 ---
