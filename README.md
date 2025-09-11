@@ -37,9 +37,9 @@
 ### 📂 Latest Repositories
 
 <!-- REPOSTS:START -->
+- [Tejustarr](https://github.com/Tejustarr/Tejustarr)
 - [dsai-Mathematical-Foundations-3](https://github.com/Tejustarr/dsai-Mathematical-Foundations-3) — To be done
 - [dsai-DBMS-and-SQL-2](https://github.com/Tejustarr/dsai-DBMS-and-SQL-2) — To be added
-- [Tejustarr](https://github.com/Tejustarr/Tejustarr)
 - [dsai-pretest-0](https://github.com/Tejustarr/dsai-pretest-0) — Foundational repo for M.Tech DSAI Pre-Test prep — structured notes, examples, problems, and spaced-repetition flashcards covering Programming Fundamentals, Database Fundamentals, and Data Structures & Algorithms.
 - [dsai-python-for-data-science-1](https://github.com/Tejustarr/dsai-python-for-data-science-1) — To be added
 - [snowflake-handbook](https://github.com/Tejustarr/snowflake-handbook) — 📘 A structured Snowflake Handbook — from basics to expert, with cheatsheets, best practices, and new features.
